@@ -1,8 +1,10 @@
 class Veiculo
+  # Classe base para todos os veículos
   attr_accessor :marca, :modelo, :capacidade_passageiros, :velocidade_atual
   attr_reader :combustivel
 
   def initialize(marca, modelo, capacidade, combustivel = 100)
+    # Inicializa atributos comuns a todos os veículos
     @marca = marca
     @modelo = modelo
     @capacidade_passageiros = capacidade
@@ -11,17 +13,20 @@ class Veiculo
   end
 
   def acelerar(km_h)
+    # Aumenta a velocidade e consome combustível
     @velocidade_atual += km_h
     @combustivel -= (km_h * 0.1)
     puts "[#{@modelo}] Acelerando... Velocidade atual: #{@velocidade_atual} km/h."
   end
 
   def frear
+    # Zera a velocidade do veículo
     @velocidade_atual = 0
     puts "[#{@modelo}] O veículo parou."
   end
 
   def info
+    # Exibe informações básicas do veículo
     puts "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+="
     puts "Tipo: #{self.class}"
     puts "Modelo: #{@marca} #{@modelo}"
@@ -32,6 +37,7 @@ end
 
 
 class Carro < Veiculo
+  # Subclasse Carro herda de Veiculo
   attr_accessor :num_portas
 
   def initialize(marca, modelo, capacidade, num_portas)
@@ -40,49 +46,58 @@ class Carro < Veiculo
   end
 
   def abrir_porta_malas
+    # Método específico de carro
     puts "Porta-malas do #{modelo} aberto."
   end
 end
 
 class Moto < Veiculo
+  # Subclasse Moto herda de Veiculo
   def initialize(marca, modelo)
-    super(marca, modelo, 2)
+    super(marca, modelo, 2) # Moto sempre tem capacidade de 2 pessoas
   end
 
   def dar_grau
+    # Método específico de moto
     puts "A moto #{modelo} está empinando! (Cuidado)"
   end
 end
 
 class Onibus < Veiculo
+  # Subclasse Ônibus herda de Veiculo
   def initialize(marca, modelo, capacidade)
     super(marca, modelo, capacidade)
   end
 
   def solicitar_parada
+    # Método específico de ônibus
     puts "Campainha tocada. Próxima parada solicitada no ônibus #{modelo}."
   end
 end
 
 class Caminhao < Veiculo
+  # Subclasse Caminhão herda de Veiculo
   attr_accessor :carga_maxima
 
   def initialize(marca, modelo, carga_maxima)
-    super(marca, modelo, 3)
+    super(marca, modelo, 3) # Caminhão com capacidade de 3 pessoas
     @carga_maxima = carga_maxima
   end
 
   def descarregar
+    # Método específico de caminhão
     puts "Caminhão #{modelo} descarregando #{@carga_maxima} toneladas."
   end
 end
 
 class Bicicleta < Veiculo
+  # Subclasse Bicicleta herda de Veiculo
   def initialize(marca, modelo)
-    super(marca, modelo, 1, 0) 
+    super(marca, modelo, 1, 0) # Bicicleta não usa combustível
   end
 
   def acelerar(km_h)
+    # Sobrescreve método acelerar para bicicleta
     @velocidade_atual += km_h
     puts "[Bike #{modelo}] Pedalando forte! Velocidade: #{@velocidade_atual} km/h."
     puts "Você está queimando calorias em vez de combustível!"
@@ -92,45 +107,53 @@ end
 # --- Subclasses de Veículos Ferroviários ---
 
 class TremFerroviario < Veiculo
+  # Subclasse Trem Ferroviário herda de Veiculo
   def initialize(marca, modelo, num_vagoes)
-    super(marca, modelo, num_vagoes * 40)
+    super(marca, modelo, num_vagoes * 40) # Cada vagão comporta 40 pessoas
     @num_vagoes = num_vagoes
   end
 
   def apitar
+    # Método específico de trem
     puts "CHUU-CHUU! O trem ferroviário #{modelo} está chegando."
   end
 end
 
 class Metro < TremFerroviario
+  # Subclasse Metrô herda de TremFerroviario
   def initialize(linha, modelo)
-    super("Metrô", modelo, 6)
+    super("Metrô", modelo, 6) # Metrô com 6 vagões
     @linha = linha
   end
 
   def anunciar_estacao(nome_estacao)
+    # Método específico de metrô
     puts "Próxima estação da Linha #{@linha}: #{nome_estacao}."
   end
 end
 
 class Helicoptero < Veiculo
+  # Subclasse Helicóptero herda de Veiculo
   def initialize(marca, modelo)
-    super(marca, modelo, 6)
+    super(marca, modelo, 6) # Capacidade de 6 pessoas
   end
 
   def decolar_verticalmente
+    # Método específico de helicóptero
     puts "Hélices girando... O helicóptero #{modelo} está subindo!"
     @velocidade_atual = 50
   end
 end
 
 class Navio < Veiculo
+  # Subclasse Navio herda de Veiculo
   def initialize(marca, modelo, tonelagem)
-    super(marca, modelo, 2000)
+    super(marca, modelo, 2000) # Capacidade de 2000 pessoas
     @tonelagem = tonelagem
   end
 
   def lancar_ancora
+    # Método específico de navio
     puts "Navio #{@modelo} ancorado com sucesso em águas profundas."
   end
 end
@@ -138,7 +161,9 @@ end
 # --- Execução e Testes ---
 
 frota = []
+# Array que armazenará todos os veículos
 
+# Adiciona diferentes veículos à frota
 frota << Carro.new("Toyota", "Corolla", 5, 4)
 frota << Moto.new("Honda", "CB 500")
 frota << Onibus.new("Mercedes", "O500", 45)
@@ -151,10 +176,12 @@ frota << Navio.new("Maersk", "Triple E", 165000)
 
 puts "=== INICIANDO SIMULAÇÃO DE FROTA ==="
 
+# Itera sobre cada veículo da frota e executa ações
 frota.each do |v|
-  v.info
-  v.acelerar(20)
-  
+  v.info           # Exibe informações do veículo
+  v.acelerar(20)   # Acelera o veículo
+
+  # Executa métodos específicos dependendo do tipo de veículo
   case v
   when Moto then v.dar_grau
   when Metro then v.anunciar_estacao("Consolação")
